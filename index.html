@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skat Auszahlungsrechner</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell container py-3 py-lg-5">
+      <section class="hero card border-0 shadow-lg overflow-hidden">
+        <div class="card-body p-3 p-lg-5">
+          <div class="row g-3 g-lg-4 align-items-start">
+            <div class="col-lg-5">
+              <p class="eyebrow mb-2">Skat</p>
+              <h1 class="hero-title fw-semibold mb-2 mb-lg-3">Auszahlungsrechner nach Spielende</h1>
+            </div>
+            <div class="col-lg-7">
+              <form id="skat-form" class="row g-2 g-md-3" novalidate>
+                <div class="col-7 compact-field">
+                  <label class="form-label" for="name-1">Spieler 1</label>
+                  <input class="form-control" id="name-1" name="name-1" type="text" value="a" maxlength="20" required />
+                </div>
+                <div class="col-5 compact-field">
+                  <label class="form-label" for="points-1">Punkte</label>
+                  <input class="form-control" id="points-1" name="points-1" type="number" value="0" step="1" required />
+                </div>
+
+                <div class="col-7 compact-field">
+                  <label class="form-label" for="name-2">Spieler 2</label>
+                  <input class="form-control" id="name-2" name="name-2" type="text" value="b" maxlength="20" required />
+                </div>
+                <div class="col-5 compact-field">
+                  <label class="form-label" for="points-2">Punkte</label>
+                  <input class="form-control" id="points-2" name="points-2" type="number" value="0" step="1" required />
+                </div>
+
+                <div class="col-7 compact-field">
+                  <label class="form-label" for="name-3">Spieler 3</label>
+                  <input class="form-control" id="name-3" name="name-3" type="text" value="c" maxlength="20" required />
+                </div>
+                <div class="col-5 compact-field">
+                  <label class="form-label" for="points-3">Punkte</label>
+                  <input class="form-control" id="points-3" name="points-3" type="number" value="0" step="1" required />
+                </div>
+
+                <div class="col-7 compact-field">
+                  <label class="form-label" for="name-4">Spieler 4</label>
+                  <input class="form-control" id="name-4" name="name-4" type="text" value="" maxlength="20" placeholder="optional" />
+                </div>
+                <div class="col-5 compact-field">
+                  <label class="form-label" for="points-4">Punkte</label>
+                  <input class="form-control" id="points-4" name="points-4" type="number" value="" step="1" placeholder="optional" />
+                </div>
+
+                <div class="col-7 compact-field">
+                  <label class="form-label" for="tariff">Tarif in Cent</label>
+                  <div class="input-group">
+                    <span class="input-group-text">ct</span>
+                    <input class="form-control" id="tariff" name="tariff" type="number" value="0.5" min="0" step="0.1" required />
+                  </div>
+                </div>
+                <div class="col-5 compact-field button-field">
+                  <button class="btn btn-accent w-100" type="submit">Berechnen</button>
+                </div>
+
+                <div class="col-12">
+                  <div class="form-text form-help-text">Beispiel: 0,5 bedeutet 0,5 Cent pro Punktedifferenz.</div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="results card border-0 shadow-sm mt-4">
+        <div class="card-body p-3 p-md-4">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+            <div>
+              <p class="eyebrow mb-1">Ergebnis</p>
+              <h2 class="h4 mb-0">Auszahlung pro Spieler</h2>
+            </div>
+            <p class="text-secondary mb-0 small" id="summary-text">Noch keine Berechnung durchgeführt.</p>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table align-middle mb-0" id="results-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col" class="text-end">Punkte</th>
+                  <th scope="col" class="text-end">Diff.</th>
+                  <th scope="col" class="text-end">Auszahlung</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

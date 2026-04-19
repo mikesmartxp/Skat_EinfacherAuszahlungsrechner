@@ -11,6 +11,10 @@ const euroFormatter = new Intl.NumberFormat('de-DE', {
 
 const PLAYER_COUNT = 4;
 
+function parseLocalizedNumber(value) {
+  return Number(String(value).replace(',', '.'));
+}
+
 function clearInitialFieldValue(event) {
   const input = event.target;
 
@@ -55,8 +59,9 @@ function readPlayers() {
     .filter(Boolean);
 }
 
-function calculateResults(players, tariffInCents) {
+function calculateResults(players, tariffInCents, passedGames, passedGameAmountInEuro) {
   const tariffInEuro = tariffInCents / 100;
+  const passedGamesPenalty = passedGames * passedGameAmountInEuro;
 
   return players.map((player, playerIndex) => {
     const differenceSum = players.reduce((sum, opponent, opponentIndex) => {
@@ -70,7 +75,7 @@ function calculateResults(players, tariffInCents) {
     return {
       ...player,
       differenceSum,
-      payout: differenceSum * tariffInEuro,
+      payout: differenceSum * tariffInEuro - passedGamesPenalty,
     };
   });
 }
@@ -87,7 +92,7 @@ function getBadgeClass(value) {
   return 'neutral';
 }
 
-function renderResults(results, tariffInCents) {
+function renderResults(results, tariffInCents, passedGames, passedGameAmountInEuro) {
   resultsBody.innerHTML = results
     .map((entry) => {
       const badgeClass = getBadgeClass(entry.payout);
@@ -105,7 +110,11 @@ function renderResults(results, tariffInCents) {
     })
     .join('');
 
-  summaryText.textContent = `Tarif: ${tariffInCents.toLocaleString('de-DE')} ct pro Punktedifferenz. Gesamtsumme: ${euroFormatter.format(
+  const passedGamesInfo = passedGames > 0
+    ? ` Gepasste Spiele: ${passedGames} x ${euroFormatter.format(passedGameAmountInEuro)} Abzug pro Spieler.`
+    : '';
+
+  summaryText.textContent = `Tarif: ${tariffInCents.toLocaleString('de-DE')} ct pro Punktedifferenz.${passedGamesInfo} Gesamtsumme: ${euroFormatter.format(
     results.reduce((sum, entry) => sum + entry.payout, 0),
   )}.`;
 }
@@ -114,7 +123,11 @@ function handleSubmit(event) {
   event.preventDefault();
 
   const tariffInput = document.querySelector('#tariff');
-  const tariffInCents = Number(tariffInput.value.toString().replace(',', '.'));
+  const passedGamesInput = document.querySelector('#passed-games');
+  const passedGameAmountInput = document.querySelector('#passed-game-amount');
+  const tariffInCents = parseLocalizedNumber(tariffInput.value);
+  const passedGames = Number(passedGamesInput.value);
+  const passedGameAmountInEuro = parseLocalizedNumber(passedGameAmountInput.value);
 
   if (!Number.isFinite(tariffInCents) || tariffInCents < 0) {
     tariffInput.focus();
@@ -122,11 +135,33 @@ function handleSubmit(event) {
     return;
   }
 
+  if (!Number.isInteger(passedGames) || passedGames < 0) {
+    passedGamesInput.focus();
+    summaryText.textContent = 'Bitte eine gueltige Anzahl gepasster Spiele eingeben.';
+    return;
+  }
+
+  if (!Number.isFinite(passedGameAmountInEuro) || passedGameAmountInEuro < 0) {
+    passedGameAmountInput.focus();
+    summaryText.textContent = 'Bitte einen gueltigen Tarif fuer gepasste Spiele in Euro eingeben.';
+    return;
+  }
+
   const players = readPlayers();
-  const results = calculateResults(players, tariffInCents);
-  renderResults(results, tariffInCents);
+  const results = calculateResults(players, tariffInCents, passedGames, passedGameAmountInEuro);
+  renderResults(results, tariffInCents, passedGames, passedGameAmountInEuro);
 }
 
 form.addEventListener('submit', handleSubmit);
 form.addEventListener('focusin', clearInitialFieldValue);
-renderResults(calculateResults(readPlayers(), Number(document.querySelector('#tariff').value)), Number(document.querySelector('#tariff').value));
+
+const initialTariffInCents = parseLocalizedNumber(document.querySelector('#tariff').value);
+const initialPassedGames = Number(document.querySelector('#passed-games').value);
+const initialPassedGameAmountInEuro = parseLocalizedNumber(document.querySelector('#passed-game-amount').value);
+
+renderResults(
+  calculateResults(readPlayers(), initialTariffInCents, initialPassedGames, initialPassedGameAmountInEuro),
+  initialTariffInCents,
+  initialPassedGames,
+  initialPassedGameAmountInEuro,
+);

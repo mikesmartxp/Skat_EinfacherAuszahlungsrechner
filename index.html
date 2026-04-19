@@ -23,6 +23,11 @@
             </div>
             <div class="col-lg-7">
               <form id="skat-form" class="row g-2 g-md-3" novalidate>
+                <div class="col-12 compact-field">
+                  <label class="form-label" for="passed-games">Anzahl gepasste Spiele</label>
+                  <input class="form-control" id="passed-games" name="passed-games" type="number" value="0" min="0" step="1" required />
+                </div>
+
                 <div class="col-7 compact-field">
                   <label class="form-label" for="name-1">Spieler 1</label>
                   <input class="form-control" id="name-1" name="name-1" type="text" value="a" maxlength="20" required />
@@ -59,19 +64,27 @@
                   <input class="form-control" id="points-4" name="points-4" type="number" value="" step="1" placeholder="optional" />
                 </div>
 
-                <div class="col-7 compact-field">
+                <div class="col-md-6 compact-field">
                   <label class="form-label" for="tariff">Tarif in Cent</label>
                   <div class="input-group">
                     <span class="input-group-text">ct</span>
                     <input class="form-control" id="tariff" name="tariff" type="number" value="0.5" min="0" step="0.1" required />
                   </div>
                 </div>
-                <div class="col-5 compact-field button-field">
+                <div class="col-md-6 compact-field">
+                  <label class="form-label" for="passed-game-amount">Tarif gepasste Spiele</label>
+                  <div class="input-group">
+                    <span class="input-group-text">EUR</span>
+                    <input class="form-control" id="passed-game-amount" name="passed-game-amount" type="number" value="1" min="0" step="0.1" required />
+                  </div>
+                </div>
+
+                <div class="col-12 compact-field button-field">
                   <button class="btn btn-accent w-100" type="submit">Berechnen</button>
                 </div>
 
                 <div class="col-12">
-                  <div class="form-text form-help-text">Beispiel: 0,5 bedeutet 0,5 Cent pro Punktedifferenz.</div>
+                  <div class="form-text form-help-text">Beispiel: 0,5 bedeutet 0,5 Cent pro Punktedifferenz. Gepasste Spiele werden als Anzahl mal Tarif gepasste Spiele berechnet und pro Spieler abgezogen.</div>
                 </div>
               </form>
             </div>
